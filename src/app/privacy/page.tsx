@@ -107,8 +107,13 @@ export default function PrivacyPage() {
 
       <section className="mb-10">
         <h2 className={`${h2} mb-3`}>アクセス情報と Cookie</h2>
+        <p className={`${body} mb-3`}>
+          当サイトは、アクセス状況の把握のために Cloudflare Web Analytics を利用しています。Cookie
+          を使わず、個人を特定する情報は収集しません（
+          <ExternalLink href="https://www.cloudflare.com/privacypolicy/">Cloudflare のプライバシーポリシー</ExternalLink>
+          ）。Google アナリティクス等の第三者の解析ツールや広告用の Cookie は使用していません。
+        </p>
         <p className={body}>
-          当サイトは、アクセス解析のための外部ツール（Google アナリティクス等）や広告用の Cookie を使用していません。
           サイトの配信とセキュリティ保護（ボット対策）のため、Cloudflare のネットワーク上で IP
           アドレス等の通信情報が処理され、Cloudflare がセキュリティ目的の Cookie を設定することがあります。
         </p>
