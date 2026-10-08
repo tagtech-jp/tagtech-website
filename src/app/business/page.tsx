@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/business/' },
   title: '事業構造',
   description: 'TagTech の事業構造 — TagDeck をメイン軸に 6 支援事業が連携',
 }
@@ -54,7 +55,7 @@ const businesses = [
 const roadmap = [
   { period: '2026 年 5〜7 月', milestone: 'TagDeck フェーズ 4 完成（ふわっち・Kick・ニコ生）、β 10 名で動作検証' },
   { period: '2026 年 8〜10 月', milestone: 'フェーズ 5〜7 完成（イベント勝率・AI カンペ・Push 通知）、FANBOX 支援開始、100 名突破' },
-  { period: '2026 年 11 月〜2027 年 1 月', milestone: 'Cloudflare Workers 移行・Stripe 月額課金・株式会社 TagTech 法人化' },
+  { period: '2026 年 11 月〜2027 年 1 月', milestone: 'Cloudflare Workers 移行・Stripe 月額課金・法人化' },
   { period: '2027 年 2〜6 月', milestone: 'YouTube Live・Twitch 対応、月商 100 万円超え' },
   { period: '2027 年下半期', milestone: 'Enterprise プラン提供開始・配信事務所と提携・月商 500 万円目標' },
   { period: '2028 年〜', milestone: '金商法登録準備（投資助言業）と連携した投資情報配信プラットフォーム検討' },

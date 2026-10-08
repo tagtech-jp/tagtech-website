@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/tagoshi/' },
   title: 'TagOshi',
   description: '推し配信者を横断的に追える、リスナー向けのアプリ。',
 }

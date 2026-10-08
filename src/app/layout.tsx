@@ -17,9 +17,6 @@ export const metadata: Metadata = {
   },
   description:
     'TagTech は、配信者向け AI サポートツール TagDeck を中心に、配信・動画運用を支えるプロダクトを開発する個人プロジェクトです。',
-  alternates: {
-    canonical: '/',
-  },
   openGraph: {
     title: 'TagTech',
     description:

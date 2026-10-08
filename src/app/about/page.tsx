@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/about/' },
   title: 'About',
   description: 'TagTech について — ミッション・ビジョン・事業概要',
 }
@@ -45,7 +46,7 @@ export default function AboutPage() {
           </div>
           <div className="flex gap-6">
             <dt className="w-28 shrink-0 text-smoke">法人化予定</dt>
-            <dd className="text-snow">2026 年 11 月〜2027 年 1 月（株式会社 TagTech）</dd>
+            <dd className="text-snow">2026 年 11 月〜2027 年 1 月（予定）</dd>
           </div>
           <div className="flex gap-6">
             <dt className="w-28 shrink-0 text-smoke">事業内容</dt>

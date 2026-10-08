@@ -3,6 +3,7 @@ import { PLANS } from '@/lib/plans'
 import { PricingCard } from '@/components/PricingCard'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/tagdeck/' },
   title: 'TagDeck',
   description: '配信者向けセカンドスクリーン型 AI SaaS — リアルタイム CRM・イベント勝率シミュレーター・AI 接客カンペ',
 }

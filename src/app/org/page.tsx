@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/org/' },
   title: '組織体制',
   description: 'TagTech のAIエージェント組織図 — AIエージェント69名と人間1名（意思決定者）で構成する個人事業の体制を公開します。',
 }

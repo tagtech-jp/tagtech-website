@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import ContactForm from '@/components/ContactForm'
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/contact/' },
   title: 'お問い合わせ',
   description: 'TagTech へのお問い合わせ',
 }
