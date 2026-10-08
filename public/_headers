@@ -5,11 +5,12 @@
 # Cloudflare も Bot 対策のインラインスクリプトを注入するため script-src に 'unsafe-inline' が要る
 # （静的ファイルには nonce を付けられない）。それでも frame-ancestors / object-src / base-uri /
 # form-action と、外部オリジンからのスクリプト・iframe・接続の禁止は効く。
-# 許可している外部オリジンは Turnstile（challenges.cloudflare.com）だけ。
+# 許可している外部オリジンは Turnstile（challenges.cloudflare.com）と Cloudflare Web Analytics
+# （static.cloudflareinsights.com のスクリプトと cloudflareinsights.com への送信。Cloudflare がブラウザ向けの HTML にだけ注入する）。
 
 /*
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
