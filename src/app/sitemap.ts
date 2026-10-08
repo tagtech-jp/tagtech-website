@@ -18,7 +18,7 @@ const routes = [
 export default function sitemap(): MetadataRoute.Sitemap {
   return routes.map(({ path, priority }) => ({
     url: `${baseUrl}${path}`,
-    lastModified: new Date('2026-05-22'),
+    lastModified: new Date('2026-10-08'),
     changeFrequency: 'weekly',
     priority,
   }))

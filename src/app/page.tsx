@@ -1,5 +1,10 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PLANS } from '@/lib/plans'
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+}
 
 const values = [
   {
