@@ -3,7 +3,6 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'ページが見つかりません',
-  robots: { index: false, follow: false },
 }
 
 const body = 'text-body leading-body tracking-body'

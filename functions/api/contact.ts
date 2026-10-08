@@ -203,12 +203,6 @@ async function sendResend(apiKey: string, from: string, to: string, d: ContactIn
 }
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
-  const required: Array<keyof Env> = ['RESEND_API_KEY', 'CONTACT_FROM_EMAIL', 'CONTACT_TO_EMAIL', 'TURNSTILE_SECRET_KEY']
-  const missing = required.filter((k) => !env[k])
-  if (missing.length > 0) {
-    console.error('[contact] missing env:', missing.join(','))
-    return fail(503, 'お問い合わせフォームは現在ご利用いただけません。メール（info@tagtech.jp）でご連絡ください。')
-  }
 
   const declaredLength = Number(request.headers.get('content-length') ?? '0')
   if (declaredLength > MAX_BODY_BYTES) return fail(413, '送信内容が大きすぎます')
@@ -225,6 +219,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const parsed = parseInput(raw)
   if (!parsed.ok) return fail(400, ...parsed.errors)
   const data = parsed.data
+
+  // 入力の検証の後で設定を確認する（設定が無くても入力エラーは 400 で返し、送信は 503 で止める）
+  const required: Array<keyof Env> = ['RESEND_API_KEY', 'CONTACT_FROM_EMAIL', 'CONTACT_TO_EMAIL', 'TURNSTILE_SECRET_KEY']
+  const missing = required.filter((k) => !env[k])
+  if (missing.length > 0) {
+    console.error('[contact] missing env:', missing.join(','))
+    return fail(503, 'お問い合わせフォームは現在ご利用いただけません。メール（info@tagtech.jp）でご連絡ください。')
+  }
 
   let turnstileOk = false
   try {
