@@ -2,7 +2,18 @@
 
 import { useEffect, useState } from 'react'
 
+declare global {
+  interface Window {
+    turnstile?: { reset: (container?: string | HTMLElement) => void }
+  }
+}
+
 type Status = 'idle' | 'submitting' | 'success' | 'error'
+
+// サーバー側（functions/api/contact.ts の LIMITS）と同じ上限
+const MAX = { name: 100, email: 254, subject: 200, message: 5000 } as const
+
+const GENERIC_ERROR = '送信に失敗しました。しばらくしてから再度お試しください。'
 
 const body = 'text-body leading-body tracking-body'
 const label = `block ${body} font-medium text-ash mb-1`
@@ -35,6 +46,15 @@ export default function ContactForm() {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
+  // Turnstile のトークンは 1 回しか使えないので、送信のたびにウィジェットを作り直す
+  const resetTurnstile = () => {
+    try {
+      window.turnstile?.reset()
+    } catch {
+      // ウィジェットが未初期化のときなどは無視する
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setStatus('submitting')
@@ -47,18 +67,21 @@ export default function ContactForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, 'cf-turnstile-response': token }),
       })
-      const data = await res.json()
+      // JSON でない応答（Cloudflare のエラーページなど）は空として扱い、一般的なメッセージを出す
+      const data: { success?: boolean; errors?: string[] } = await res.json().catch(() => ({}))
 
-      if (data.success) {
+      if (res.ok && data.success) {
         setStatus('success')
         setForm({ name: '', email: '', subject: '', message: '' })
       } else {
         setStatus('error')
-        setErrorMsg(data.errors?.join(', ') || '送信に失敗しました。しばらくしてから再度お試しください。')
+        setErrorMsg(data.errors?.length ? data.errors.join(' / ') : GENERIC_ERROR)
       }
     } catch {
       setStatus('error')
       setErrorMsg('ネットワークエラーが発生しました。しばらくしてから再度お試しください。')
+    } finally {
+      resetTurnstile()
     }
   }
 
@@ -80,7 +103,7 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {status === 'error' && (
-        <div className={`rounded-xl border border-ember-pulse bg-molasses p-4 ${body} text-ember-pulse`}>
+        <div role="alert" className={`rounded-xl border border-ember-pulse bg-molasses p-4 ${body} text-ember-pulse`}>
           {errorMsg}
         </div>
       )}
@@ -94,6 +117,8 @@ export default function ContactForm() {
           name="name"
           type="text"
           required
+          maxLength={MAX.name}
+          autoComplete="name"
           value={form.name}
           onChange={handleChange}
           className={input}
@@ -109,6 +134,8 @@ export default function ContactForm() {
           name="email"
           type="email"
           required
+          maxLength={MAX.email}
+          autoComplete="email"
           value={form.email}
           onChange={handleChange}
           className={input}
@@ -124,6 +151,7 @@ export default function ContactForm() {
           name="subject"
           type="text"
           required
+          maxLength={MAX.subject}
           value={form.subject}
           onChange={handleChange}
           className={input}
@@ -139,18 +167,31 @@ export default function ContactForm() {
           name="message"
           required
           rows={6}
+          maxLength={MAX.message}
           value={form.message}
           onChange={handleChange}
           className={`${input} resize-y`}
         />
+        <p className="text-caption leading-caption tracking-caption text-smoke mt-1">
+          {form.message.length.toLocaleString('ja-JP')} / {MAX.message.toLocaleString('ja-JP')} 文字
+        </p>
       </div>
 
-      {/* Cloudflare Turnstile CAPTCHA widget — data-sitekey は本番 Site Key に置換してください */}
+      {/* Cloudflare Turnstile（ボット対策）。Site Key は公開情報で、本番ドメインに紐づく */}
       <div
         className="cf-turnstile"
         data-sitekey="0x4AAAAAADMSpC9qskgSTTGG"
         data-theme="dark"
+        data-language="ja"
       />
+
+      <p className="text-caption leading-caption tracking-caption text-smoke">
+        送信いただいた内容の取り扱いは
+        <a href="/privacy/" className="text-electric-iris underline-offset-4 hover:underline">
+          プライバシーポリシー
+        </a>
+        をご覧ください。
+      </p>
 
       <button
         type="submit"
